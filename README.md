@@ -17,7 +17,7 @@ This is the guide for the library:
 | [begin()](https://github.com/deempalme/arduino_serial/wiki/Begin) | Opening serial communication. |
 | [end()](https://github.com/deempalme/arduino_serial/wiki/End) | Disables serial communication. |
 | [find()](https://github.com/deempalme/arduino_serial/wiki/Find) | Reads data from the serial buffer until the target is found. |
-| [find_until(Find-until)](https://github.com/deempalme/arduino_serial/wiki/Find-until) | Reads data from the serial buffer until the target is found. |
+| [find_until()](https://github.com/deempalme/arduino_serial/wiki/Find-until) | Reads data from the serial buffer until the target is found. |
 | [flush()](https://github.com/deempalme/arduino_serial/wiki/Flush) | Waits for the transmission of outgoing serial data to complete. |
 | [parse_float()](https://github.com/deempalme/arduino_serial/wiki/Parse-float) |  |
 | [parse_int()](https://github.com/deempalme/arduino_serial/wiki/Parse-int) |  |
