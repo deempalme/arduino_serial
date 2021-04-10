@@ -5,6 +5,7 @@
 #include <boost/asio/io_service.hpp>                         // for io_service
 #include <boost/asio/serial_port.hpp>                        // for serial_port
 #include <boost/asio/serial_port_base.hpp>                   // for serial_p...
+#include <boost/chrono.hpp>
 #include <boost/date_time/posix_time/posix_time_config.hpp>  // for time_dur...
 #include <boost/system/error_code.hpp>                       // for error_...
 #include <iosfwd>                                            // for size_t
@@ -91,19 +92,55 @@ namespace ramrod {
        * @return `false` if there was an error when disabling serial communication
        */
       bool end();
-      // TODO: complete finding
-      bool find(char target);
-      bool find(char target, const std::size_t length);
-      // TODO: complete finding until
-      bool find_until(char target, char terminal);
-      // TODO: complete flushing
+      /**
+       * @brief Reads data from the serial buffer until the target is found.
+       *
+       * @param target The string to search for.
+       *
+       * @return `true` if target is found, `false` if it times out.
+       */
+      bool find(const char target);
+      /**
+       * @brief Reads data from the serial buffer until the target is found.
+       *
+       * @param target The string to search for.
+       * @param length Length of the target.
+       *
+       * @return `true` if target is found, `false` if it times out.
+       */
+      bool find(const char target, const std::size_t length);
+      /**
+       * @brief Reads data from the serial buffer until a target string of given
+       *        length or terminator string is found.
+       *
+       * @param target   The string to search for.
+       * @param terminal The terminal string in the search.
+       *
+       * @return `true` if the target string is found, `false` if it times out.
+       */
+      bool find_until(const char target, const char terminal);
+      /**
+       * @brief Waits for the transmission of outgoing serial data to complete.
+       */
       void flush();
       // TODO: complete parsing
-      void parse_float();
+      float parse_float();
+      float parse_float(const lookahead_mode lookahead);
+      float parse_float(const lookahead_mode lookahead, const char ignore);
       // TODO: complete parsing
-      void parse_int();
-      // TODO: complete peeking
-      bool peek();
+      long parse_int();
+      long parse_int(const lookahead_mode lookahead);
+      long parse_int(const lookahead_mode lookahead, const char ignore);
+      /**
+       * @brief Peeking the next character in the reading buffer
+       *
+       * Returns the next byte (character) of incoming serial data without removing it
+       * from the internal serial buffer. That is, successive calls to `peek()` will return
+       * the same character, as will the next call to `read()`.
+       *
+       * @return The first byte of incoming serial data available (or -1 if no data is available).
+       */
+      int peek();
       // TODO: complete printing
       bool print();
       // TODO: complete printing line
@@ -131,7 +168,7 @@ namespace ramrod {
        *
        * Reads characters from the serial buffer into an array. The function terminates
        * (checks being done in this order) if the determined length has been read, if it
-       * times out (see Serial.setTimeout()), or if the terminator character is detected
+       * times out (see `set_timeout()`), or if the terminator character is detected
        * (in which case the function returns the characters up to the last character before
        * the supplied terminator). The terminator itself is not returned in the buffer.
        *
@@ -146,7 +183,7 @@ namespace ramrod {
        *         parameter <= 0, a time out occurred before any other input, or a termination
        *         character was found before any other input.
        */
-      std::size_t read_bytes_until(char character, char *buffer, const std::size_t length);
+      std::size_t read_bytes_until(const char character, char *buffer, const std::size_t length);
       /**
        * @brief Reading a string
        *
@@ -168,7 +205,7 @@ namespace ramrod {
        *
        * @return The entire String read from the serial buffer, up to the terminator character
        */
-      std::string read_string_until(char terminator);
+      std::string read_string_until(const char terminator);
       /**
        * @brief Sets the maximum milliseconds to wait for serial data. It defaults to
        *        1000 milliseconds.
@@ -197,7 +234,7 @@ namespace ramrod {
        *
        * @return The number of bytes written, though reading that number is optional.
        */
-      std::size_t write(char value);
+      std::size_t write(const char value);
       /**
        * @brief Writing a string
        *
@@ -226,35 +263,37 @@ namespace ramrod {
       /**
        * @brief Indicates if the specified Serial port is ready.
        *
-       * @return Returns true` if the specified serial port is available.
+       * @return Returns `true` if the specified serial port is available.
        */
       operator bool();
 
+      bool change_buffer_max_size(const std::size_t new_buffer_size = 64);
+      // TODO: set action_wait_
+
     private:
-      std::size_t completion(const boost::system::error_code &error,
-                             const std::size_t bytes_transferred);
-      std::size_t completion_string(const boost::system::error_code &error,
-                                    const std::size_t bytes_transferred);
-      void completed(const boost::system::error_code &error, const std::size_t bytes_transferred);
-      std::size_t receive(char *buffer, const std::size_t length);
-      std::size_t receive_string();
-      std::size_t send(const char *buffer, const std::size_t length);
+      void concurrent_read();
       bool set_config(const unsigned int rate, const int config);
-      void time_out(const boost::system::error_code &error);
 
       boost::asio::io_service io_;
       boost::asio::serial_port port_;
-      boost::asio::deadline_timer timer_;
       boost::posix_time::time_duration timeout_;
       boost::system::error_code error_;
-      unsigned int baud_rate_;
-      int config_;
-      std::string port_name_;
-      std::size_t bytes_transfered_;
 
-      char *buffer_;
-      char terminator_;
-      std::string *string_;
+      std::size_t buffer_size_;
+
+      char *in_buffer_;
+      std::size_t in_position_;
+      std::size_t in_size_;
+      bool reading_;
+      bool exit_read_;
+
+      char *out_buffer_;
+      std::size_t out_position_;
+      std::size_t out_size_;
+      bool out_finished_;
+
+      boost::chrono::milliseconds action_wait_;
+      const boost::chrono::milliseconds one_;
 
     };
   } // namespace: arduino 

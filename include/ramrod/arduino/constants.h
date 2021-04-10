@@ -36,6 +36,12 @@ namespace ramrod {
       OCT = -3,
       BIN = -4
     };
+
+    enum class lookahead_mode : int {
+      SKIP_ALL,
+      SKIP_NONE,
+      SKIP_WHITESPACE
+    };
   } // namespace: arduino
 } // namespace: ramrod
 
