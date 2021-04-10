@@ -13,7 +13,7 @@ This is the guide for the library:
 | [(constructor)](https://github.com/deempalme/arduino_serial/wiki/Constructor) | Creates the serial port object. |
 | [if(serial)](https://github.com/deempalme/arduino_serial/wiki/Serial) | Indicates if the specified Serial port is ready. |
 | [available()](https://github.com/deempalme/arduino_serial/wiki/Available) | Get the number of bytes (characters) available for reading. |
-| [available_for_write()](https://github.com/deempalme/arduino_serial/wiki/Availabel-for-write) | Get the number of bytes (characters) available for writing in the serial buffer without blocking the write operation. |
+| [available_for_write()](https://github.com/deempalme/arduino_serial/wiki/Available-for-write) | Get the number of bytes (characters) available for writing in the serial buffer without blocking the write operation. |
 | [begin()](https://github.com/deempalme/arduino_serial/wiki/Begin) | Opening serial communication. |
 | [end()](https://github.com/deempalme/arduino_serial/wiki/End) | Disables serial communication. |
 | [find()](https://github.com/deempalme/arduino_serial/wiki/Find) | Reads data from the serial buffer until the target is found. |
