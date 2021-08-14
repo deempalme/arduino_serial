@@ -1,18 +1,21 @@
 #include "ramrod/arduino/serial.h"
 
+#include <string.h>                                            // for memcpy
 #include <boost/asio/buffer.hpp>                               // for mutabl...
-#include <boost/asio/impl/io_context.hpp>                      // for io_con...
 #include <boost/asio/impl/io_context.ipp>                      // for io_con...
 #include <boost/asio/io_context.hpp>                           // for io_con...
-#include <boost/asio/placeholders.hpp>                         // for error
-#include <boost/asio/read.hpp>                                 // for async_...
-#include <boost/asio/read_until.hpp>                           // for async_read_until
-#include <boost/thread/thread.hpp>
-#include <boost/asio/write.hpp>                                // for async_...
+#include <boost/asio/read.hpp>                                 // for read
+#include <boost/asio/serial_port_base.hpp>                     // for serial...
 #include <boost/bind.hpp>                                      // for bind_t
-#include <boost/date_time/posix_time/posix_time_duration.hpp>  // for hours
+#include <boost/date_time/posix_time/posix_time_duration.hpp>  // for millis...
+#include <boost/date_time/posix_time/posix_time_types.hpp>     // for micros...
+#include <boost/date_time/posix_time/ptime.hpp>                // for ptime
+#include <boost/date_time/time.hpp>                            // for base_time
+#include <boost/operators.hpp>                                 // for operator>
+#include <boost/thread/pthread/thread_data.hpp>                // for sleep_for
+#include <boost/thread/thread_only.hpp>                        // for thread
+#include <cstdlib>                                             // for free
 
-#include <iostream>
 
 namespace ramrod {
   namespace arduino {

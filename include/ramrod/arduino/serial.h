@@ -1,17 +1,15 @@
 #ifndef RAMROD_ARDUINO_SERIAL_H
 #define RAMROD_ARDUINO_SERIAL_H
 
-#include <boost/asio/deadline_timer.hpp>                     // for deadline...
 #include <boost/asio/io_service.hpp>                         // for io_service
 #include <boost/asio/serial_port.hpp>                        // for serial_port
-#include <boost/asio/serial_port_base.hpp>                   // for serial_p...
-#include <boost/chrono.hpp>
+#include <boost/chrono/duration.hpp>                         // for millisec...
 #include <boost/date_time/posix_time/posix_time_config.hpp>  // for time_dur...
-#include <boost/system/error_code.hpp>                       // for error_...
+#include <boost/system/error_code.hpp>                       // for error_code
 #include <iosfwd>                                            // for size_t
-#include <string>                                            // for allocator
+#include <string>                                            // for string
+#include "ramrod/arduino/constants.h"                        // for SERIAL_8N1
 
-#include "ramrod/arduino/constants.h"
 
 namespace ramrod {
   namespace arduino {
